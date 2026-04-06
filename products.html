@@ -1,0 +1,455 @@
+{% extends "base.html" %}
+
+{% block title %}Products - Pickle Store | All Authentic Indian Pickles{% endblock %}
+
+{% block content %}
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <!-- Page Header -->
+    <div class="mb-8">
+        <h1 class="text-4xl font-bold text-gray-900 mb-2">🥒 Our Premium Pickles</h1>
+        <p class="text-gray-600">Browse our complete collection of authentic homemade Indian pickles</p>
+    </div>
+
+    <div class="grid grid-cols-1 lg:grid-cols-4 gap-8">
+        <!-- Filters Sidebar -->
+        <aside class="lg:col-span-1">
+            <div class="card p-6 sticky top-20">
+                <h2 class="text-xl font-bold text-gray-900 mb-6 flex items-center">
+                    <i class="fas fa-filter mr-2 text-amber-700"></i>Filters
+                </h2>
+
+                <!-- Clear Filters -->
+                <button onclick="clearAllFilters()" class="w-full mb-6 px-4 py-2 bg-gray-200 hover:bg-gray-300 text-gray-900 rounded-lg font-semibold transition-colors">
+                    Clear All
+                </button>
+
+                <!-- Search Filter -->
+                <div class="mb-6">
+                    <label class="block text-sm font-semibold text-gray-900 mb-2">Search</label>
+                    <input type="text" id="search-filter" placeholder="Search pickles..." class="w-full px-3 py-2 border border-gray-300 rounded-lg outline-none focus:ring-2 focus:ring-amber-500" onkeyup="applyFilters()">
+                </div>
+
+                <!-- Price Range -->
+                <div class="mb-6">
+                    <label class="block text-sm font-semibold text-gray-900 mb-2">Price Range</label>
+                    <div class="space-y-2">
+                        <div class="flex gap-2">
+                            <input type="number" id="min-price" placeholder="Min" class="w-1/2 px-2 py-2 border border-gray-300 rounded-lg text-sm outline-none focus:ring-2 focus:ring-amber-500" onchange="applyFilters()">
+                            <input type="number" id="max-price" placeholder="Max" class="w-1/2 px-2 py-2 border border-gray-300 rounded-lg text-sm outline-none focus:ring-2 focus:ring-amber-500" onchange="applyFilters()">
+                        </div>
+                        <p class="text-xs text-gray-600" id="price-display">₹0 - ₹0</p>
+                    </div>
+                </div>
+
+                <!-- Category -->
+                <div class="mb-6">
+                    <label class="block text-sm font-semibold text-gray-900 mb-3">Category</label>
+                    <div id="categories-filter" class="space-y-2">
+                        <!-- Loaded dynamically -->
+                    </div>
+                </div>
+
+                <!-- Taste Profile -->
+                <div class="mb-6">
+                    <label class="block text-sm font-semibold text-gray-900 mb-3">Taste</label>
+                    <div id="taste-filter" class="space-y-2">
+                        <!-- Loaded dynamically -->
+                    </div>
+                </div>
+
+                <!-- Origin -->
+                <div class="mb-6">
+                    <label class="block text-sm font-semibold text-gray-900 mb-3">Origin</label>
+                    <div id="origin-filter" class="space-y-2 max-h-40 overflow-y-auto">
+                        <!-- Loaded dynamically -->
+                    </div>
+                </div>
+
+                <!-- Rating Range -->
+                <div class="mb-6">
+                    <label class="block text-sm font-semibold text-gray-900 mb-2">Rating</label>
+                    <div class="space-y-2">
+                        <label class="flex items-center">
+                            <input type="checkbox" value="4.5" onchange="applyFilters()" class="w-4 h-4 rounded">
+                            <span class="ml-2 text-sm text-gray-700">4.5+ ⭐</span>
+                        </label>
+                        <label class="flex items-center">
+                            <input type="checkbox" value="4" onchange="applyFilters()" class="w-4 h-4 rounded">
+                            <span class="ml-2 text-sm text-gray-700">4.0+ ⭐</span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Products Grid -->
+        <div class="lg:col-span-3">
+            <!-- Top Bar -->
+            <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-4">
+                <p class="text-gray-600">
+                    Showing <span id="product-count">0</span> products
+                </p>
+
+                <select id="sort-select" onchange="applyFilters()" class="px-4 py-2 border border-gray-300 rounded-lg outline-none focus:ring-2 focus:ring-amber-500">
+                    <option value="name">Sort by Name (A-Z)</option>
+                    <option value="price_low">Price: Low to High</option>
+                    <option value="price_high">Price: High to Low</option>
+                    <option value="rating">Highest Rated</option>
+                    <option value="newest">Newest First</option>
+                </select>
+            </div>
+
+            <!-- Products Grid -->
+            <div id="products-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
+                <!-- Loading Placeholder -->
+                <div class="col-span-3 text-center py-12">
+                    <i class="fas fa-spinner fa-spin text-3xl text-amber-700"></i>
+                    <p class="text-gray-600 mt-4">Loading products...</p>
+                </div>
+            </div>
+
+            <!-- Pagination -->
+            <div id="pagination" class="flex justify-center items-center gap-2 mt-12">
+                <!-- Loaded dynamically -->
+            </div>
+
+            <!-- No Results -->
+            <div id="no-results" class="hidden col-span-3 text-center py-12">
+                <div class="text-4xl mb-4">😕</div>
+                <h3 class="text-xl font-bold text-gray-900 mb-2">No Products Found</h3>
+                <p class="text-gray-600 mb-4">Try adjusting your filters or search terms</p>
+                <button onclick="clearAllFilters()" class="btn-primary">
+                    Clear Filters
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal for Quick View -->
+<div id="quick-view-modal" class="hidden fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4">
+    <div class="card max-w-md w-full max-h-96 overflow-y-auto">
+        <div class="sticky top-0 bg-amber-700 text-white p-4 flex justify-between items-center">
+            <h3 class="text-lg font-bold">Quick View</h3>
+            <button onclick="closeQuickView()" class="text-white hover:bg-amber-800 rounded-full w-8 h-8 flex items-center justify-center transition-colors">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        <div id="quick-view-content" class="p-4">
+            <!-- Loaded dynamically -->
+        </div>
+    </div>
+</div>
+
+<!-- Script -->
+<script>
+    let currentPage = 1;
+    let allProducts = [];
+    let filters = {
+        search: '',
+        minPrice: null,
+        maxPrice: null,
+        category: [],
+        taste: [],
+        origin: [],
+        minRating: null,
+        sort: 'name'
+    };
+
+    // Load Filter Options
+    async function loadFilterOptions() {
+        const response = await fetch('/api/filters');
+        const data = await response.json();
+
+        // Load Categories
+        const categoriesContainer = document.getElementById('categories-filter');
+        categoriesContainer.innerHTML = data.categories.map(cat => `
+            <label class="flex items-center">
+                <input type="checkbox" value="${cat}" onchange="applyFilters()" class="category-filter w-4 h-4 rounded">
+                <span class="ml-2 text-sm text-gray-700">${cat}</span>
+            </label>
+        `).join('');
+
+        // Load Tastes
+        const tasteContainer = document.getElementById('taste-filter');
+        tasteContainer.innerHTML = data.tastes.map(taste => `
+            <label class="flex items-center">
+                <input type="checkbox" value="${taste}" onchange="applyFilters()" class="taste-filter w-4 h-4 rounded">
+                <span class="ml-2 text-sm text-gray-700">${taste}</span>
+            </label>
+        `).join('');
+
+        // Load Origins
+        const originContainer = document.getElementById('origin-filter');
+        originContainer.innerHTML = data.origins.map(origin => `
+            <label class="flex items-center">
+                <input type="checkbox" value="${origin}" onchange="applyFilters()" class="origin-filter w-4 h-4 rounded">
+                <span class="ml-2 text-sm text-gray-700">${origin}</span>
+            </label>
+        `).join('');
+
+        // Set price range
+        document.getElementById('min-price').setAttribute('min', Math.floor(data.price_range.min));
+        document.getElementById('max-price').setAttribute('max', Math.ceil(data.price_range.max));
+        document.getElementById('min-price').setAttribute('value', Math.floor(data.price_range.min));
+        document.getElementById('max-price').setAttribute('value', Math.ceil(data.price_range.max));
+    }
+
+    // Apply Filters
+    async function applyFilters() {
+        currentPage = 1;
+
+        // Get filter values
+        filters.search = document.getElementById('search-filter').value;
+        filters.minPrice = parseInt(document.getElementById('min-price').value) || null;
+        filters.maxPrice = parseInt(document.getElementById('max-price').value) || null;
+        filters.category = Array.from(document.querySelectorAll('.category-filter:checked')).map(el => el.value);
+        filters.taste = Array.from(document.querySelectorAll('.taste-filter:checked')).map(el => el.value);
+        filters.origin = Array.from(document.querySelectorAll('.origin-filter:checked')).map(el => el.value);
+        filters.sort = document.getElementById('sort-select').value;
+
+        // Build query
+        let query = `/api/products?page=${currentPage}&sort=${filters.sort}`;
+        
+        if (filters.minPrice) query += `&min_price=${filters.minPrice}`;
+        if (filters.maxPrice) query += `&max_price=${filters.maxPrice}`;
+        if (filters.category.length > 0) query += `&category=${filters.category[0]}`;
+        if (filters.taste.length > 0) query += `&taste=${filters.taste[0]}`;
+        if (filters.origin.length > 0) query += `&origin=${filters.origin[0]}`;
+
+        // Search filter
+        if (filters.search) {
+            const response = await fetch(`/api/search?q=${encodeURIComponent(filters.search)}`);
+            const data = await response.json();
+            allProducts = data.products;
+        } else {
+            const response = await fetch(query);
+            const data = await response.json();
+            allProducts = data.products;
+        }
+
+        renderProducts();
+    }
+
+    // Render Products
+    function renderProducts() {
+        const container = document.getElementById('products-grid');
+        const noResults = document.getElementById('no-results');
+
+        if (allProducts.length === 0) {
+            container.classList.add('hidden');
+            noResults.classList.remove('hidden');
+            document.getElementById('product-count').textContent = '0';
+            document.getElementById('pagination').innerHTML = '';
+            return;
+        }
+
+        container.classList.remove('hidden');
+        noResults.classList.add('hidden');
+
+        // Pagination
+        const perPage = 9;
+        const startIndex = (currentPage - 1) * perPage;
+        const endIndex = startIndex + perPage;
+        const paginatedProducts = allProducts.slice(startIndex, endIndex);
+
+        document.getElementById('product-count').textContent = allProducts.length;
+
+        container.innerHTML = paginatedProducts.map(product => `
+            <div class="product-card overflow-hidden animate-fade-in-up">
+                <div class="relative">
+                    <div class="product-card bg-gradient-to-br from-amber-100 to-orange-100 flex items-center justify-center overflow-hidden h-48">
+                        <div class="text-6xl">
+                            <i class="${getProductIcon(product.image_url)}"></i>
+                        </div>
+                    </div>
+                    <div class="absolute top-3 right-3 badge badge-success">
+                        ${product.rating}⭐
+                    </div>
+                    <div class="absolute top-3 left-3 badge badge-warning">
+                        ${product.spice_level}
+                    </div>
+                </div>
+                <div class="p-4">
+                    <h3 class="font-bold text-gray-900 line-clamp-2 mb-1">${product.name}</h3>
+                    <p class="text-xs text-gray-600 mb-2">📍 ${product.origin}</p>
+                    <p class="text-xs text-gray-600 mb-2">Taste: ${product.taste_profile}</p>
+                    
+                    <div class="flex justify-between items-center mb-3">
+                        <span class="text-xl font-bold text-amber-700">₹${product.price}</span>
+                        <span class="text-xs text-gray-600">${product.reviews_count} reviews</span>
+                    </div>
+
+                    <div class="flex gap-2">
+                        <button onclick="openQuickView(${product.id})" class="flex-1 btn-secondary text-sm py-2">
+                            <i class="fas fa-eye mr-1"></i> View
+                        </button>
+                        <button onclick="addToCart(${product.id}, '${product.name}', '${product.image_url}')" class="flex-1 btn-primary text-sm py-2">
+                            <i class="fas fa-cart-plus mr-1"></i> Add
+                        </button>
+                    </div>
+                </div>
+            </div>
+        `).join('');
+
+        renderPagination();
+    }
+
+    // Render Pagination
+    function renderPagination() {
+        const totalPages = Math.ceil(allProducts.length / 9);
+        const container = document.getElementById('pagination');
+
+        if (totalPages <= 1) {
+            container.innerHTML = '';
+            return;
+        }
+
+        let html = '';
+
+        // Previous Button
+        if (currentPage > 1) {
+            html += `
+                <button onclick="goToPage(${currentPage - 1})" class="px-3 py-2 border border-gray-300 rounded-lg hover:bg-amber-50 transition-colors">
+                    <i class="fas fa-chevron-left"></i>
+                </button>
+            `;
+        }
+
+        // Page Numbers
+        for (let i = 1; i <= totalPages; i++) {
+            if (
+                i === 1 ||
+                i === totalPages ||
+                (i >= currentPage - 1 && i <= currentPage + 1)
+            ) {
+                html += `
+                    <button onclick="goToPage(${i})" class="px-3 py-2 rounded-lg transition-colors ${
+                        i === currentPage
+                            ? 'bg-amber-700 text-white'
+                            : 'border border-gray-300 hover:bg-amber-50'
+                    }">
+                        ${i}
+                    </button>
+                `;
+            } else if (i === currentPage - 2 || i === currentPage + 2) {
+                html += `<span class="px-3 py-2">...</span>`;
+            }
+        }
+
+        // Next Button
+        if (currentPage < totalPages) {
+            html += `
+                <button onclick="goToPage(${currentPage + 1})" class="px-3 py-2 border border-gray-300 rounded-lg hover:bg-amber-50 transition-colors">
+                    <i class="fas fa-chevron-right"></i>
+                </button>
+            `;
+        }
+
+        container.innerHTML = html;
+    }
+
+    // Go to Page
+    function goToPage(page) {
+        currentPage = page;
+        renderProducts();
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    // Open Quick View
+    async function openQuickView(productId) {
+        const response = await fetch(`/api/products/${productId}`);
+        const product = await response.json();
+
+        const content = document.getElementById('quick-view-content');
+        content.innerHTML = `
+            <div class="text-center">
+                <div class="text-7xl mb-4 bg-gradient-to-br from-amber-100 to-orange-100 p-8 rounded-lg flex items-center justify-center h-48">
+                    <i class="${getProductIcon(product.image_url)}"></i>
+                </div>
+                <h2 class="text-xl font-bold text-gray-900 mb-2">${product.name}</h2>
+                <div class="flex justify-center gap-1 mb-3">
+                    ${Array(5).fill(0).map((_, i) => `
+                        <i class="fas fa-star ${i < Math.floor(product.rating) ? 'text-yellow-400' : 'text-gray-300'}"></i>
+                    `).join('')}
+                    <span class="text-sm text-gray-600 ml-2">${product.rating} (${product.reviews_count})</span>
+                </div>
+                
+                <p class="text-2xl font-bold text-amber-700 mb-4">₹${product.price}</p>
+                
+                <div class="text-left space-y-2 mb-4 text-sm">
+                    <p><span class="font-semibold">Origin:</span> ${product.origin}</p>
+                    <p><span class="font-semibold">Taste:</span> ${product.taste_profile}</p>
+                    <p><span class="font-semibold">Spice:</span> ${product.spice_level}</p>
+                    <p><span class="font-semibold">Category:</span> ${product.category}</p>
+                </div>
+
+                <p class="text-gray-600 text-sm mb-4">${product.description}</p>
+                
+                <button onclick="addToCart(${product.id}, '${product.name}', '${product.image_url}')" class="btn-primary w-full mb-2">
+                    Add to Cart
+                </button>
+                <button onclick="closeQuickView()" class="btn-secondary w-full">
+                    Close
+                </button>
+            </div>
+        `;
+
+        document.getElementById('quick-view-modal').classList.remove('hidden');
+    }
+
+    // Close Quick View
+    function closeQuickView() {
+        document.getElementById('quick-view-modal').classList.add('hidden');
+    }
+
+    // Add to Cart
+    async function addToCart(productId, name, image) {
+        const response = await fetch('/api/cart', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                product_id: productId,
+                quantity: 1,
+                session_id: sessionId
+            })
+        });
+
+        if (response.ok) {
+            updateCartCount();
+            closeQuickView();
+            // Show success notification
+            const notification = document.createElement('div');
+            notification.className = 'fixed bottom-4 right-4 bg-green-500 text-white px-6 py-3 rounded-lg font-semibold z-40 animate-slide-in-right';
+            notification.textContent = `${name} added to cart!`;
+            document.body.appendChild(notification);
+            setTimeout(() => notification.remove(), 3000);
+        }
+    }
+
+    // Clear All Filters
+    function clearAllFilters() {
+        document.getElementById('search-filter').value = '';
+        document.querySelectorAll('.category-filter, .taste-filter, .origin-filter').forEach(el => el.checked = false);
+        applyFilters();
+    }
+
+    // Get search query from URL
+    function getSearchQuery() {
+        const params = new URLSearchParams(window.location.search);
+        return params.get('search') || '';
+    }
+
+    // Initialize
+    document.addEventListener('DOMContentLoaded', () => {
+        loadFilterOptions();
+        const searchQuery = getSearchQuery();
+        if (searchQuery) {
+            document.getElementById('search-filter').value = searchQuery;
+        }
+        applyFilters();
+    });
+</script>
+{% endblock %}

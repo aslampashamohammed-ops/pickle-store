@@ -1,0 +1,249 @@
+{% extends "base.html" %}
+
+{% block title %}Contact Us - Pickle Store{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="bg-gradient-to-r from-amber-600 to-orange-500 py-16 text-white">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <h1 class="text-4xl md:text-5xl font-bold mb-4">Contact Us</h1>
+        <p class="text-xl text-amber-100">Get in touch with our team. We're always happy to help!</p>
+    </div>
+</section>
+
+<!-- Contact Section -->
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-12">
+        <!-- Contact Info -->
+        <div class="space-y-8">
+            <!-- Email -->
+            <div class="card p-6">
+                <div class="text-4xl text-amber-700 mb-4">
+                    <i class="fas fa-envelope"></i>
+                </div>
+                <h3 class="text-xl font-bold text-gray-900 mb-2">Email</h3>
+                <a href="mailto:info@picklestore.com" class="text-gray-700 hover:text-amber-700 transition-colors">
+                    info@picklestore.com
+                </a>
+                <p class="text-sm text-gray-600 mt-2">We reply within 24 hours</p>
+            </div>
+
+            <!-- Phone -->
+            <div class="card p-6">
+                <div class="text-4xl text-amber-700 mb-4">
+                    <i class="fas fa-phone"></i>
+                </div>
+                <h3 class="text-xl font-bold text-gray-900 mb-2">Phone</h3>
+                <a href="tel:+919876543210" class="text-gray-700 hover:text-amber-700 transition-colors">
+                    +91 98765 43210
+                </a>
+                <p class="text-sm text-gray-600 mt-2">Mon-Sat, 10 AM - 6 PM IST</p>
+            </div>
+
+            <!-- Address -->
+            <div class="card p-6">
+                <div class="text-4xl text-amber-700 mb-4">
+                    <i class="fas fa-map-marker-alt"></i>
+                </div>
+                <h3 class="text-xl font-bold text-gray-900 mb-2">Address</h3>
+                <p class="text-gray-700">
+                    Pickle Store HQ<br>
+                    123 Food Street<br>
+                    Delhi, India 110001
+                </p>
+            </div>
+
+            <!-- Follow Us -->
+            <div class="card p-6">
+                <h3 class="text-xl font-bold text-gray-900 mb-4">Follow Us</h3>
+                <div class="flex gap-4">
+                    <a href="#" class="text-2xl text-gray-600 hover:text-amber-700 transition-colors">
+                        <i class="fab fa-facebook"></i>
+                    </a>
+                    <a href="#" class="text-2xl text-gray-600 hover:text-amber-700 transition-colors">
+                        <i class="fab fa-instagram"></i>
+                    </a>
+                    <a href="#" class="text-2xl text-gray-600 hover:text-amber-700 transition-colors">
+                        <i class="fab fa-twitter"></i>
+                    </a>
+                    <a href="#" class="text-2xl text-gray-600 hover:text-amber-700 transition-colors">
+                        <i class="fab fa-youtube"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Contact Form -->
+        <div class="lg:col-span-2">
+            <div class="card p-8">
+                <h2 class="text-2xl font-bold text-gray-900 mb-6">Send us a Message</h2>
+
+                <form id="contact-form" onsubmit="submitContactForm(event)">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                        <!-- Name -->
+                        <div>
+                            <label class="block text-sm font-semibold text-gray-900 mb-2">Name</label>
+                            <input type="text" required class="w-full px-4 py-3 border border-gray-300 rounded-lg outline-none focus:ring-2 focus:ring-amber-500" placeholder="Your name">
+                        </div>
+
+                        <!-- Email -->
+                        <div>
+                            <label class="block text-sm font-semibold text-gray-900 mb-2">Email</label>
+                            <input type="email" required class="w-full px-4 py-3 border border-gray-300 rounded-lg outline-none focus:ring-2 focus:ring-amber-500" placeholder="Your email">
+                        </div>
+                    </div>
+
+                    <!-- Phone -->
+                    <div class="mb-6">
+                        <label class="block text-sm font-semibold text-gray-900 mb-2">Phone</label>
+                        <input type="tel" class="w-full px-4 py-3 border border-gray-300 rounded-lg outline-none focus:ring-2 focus:ring-amber-500" placeholder="Your phone number">
+                    </div>
+
+                    <!-- Subject -->
+                    <div class="mb-6">
+                        <label class="block text-sm font-semibold text-gray-900 mb-2">Subject</label>
+                        <select required class="w-full px-4 py-3 border border-gray-300 rounded-lg outline-none focus:ring-2 focus:ring-amber-500">
+                            <option value="">Select a subject</option>
+                            <option value="order">Order Inquiry</option>
+                            <option value="product">Product Questions</option>
+                            <option value="feedback">Feedback</option>
+                            <option value="partnership">Partnership</option>
+                            <option value="other">Other</option>
+                        </select>
+                    </div>
+
+                    <!-- Message -->
+                    <div class="mb-6">
+                        <label class="block text-sm font-semibold text-gray-900 mb-2">Message</label>
+                        <textarea required rows="5" class="w-full px-4 py-3 border border-gray-300 rounded-lg outline-none focus:ring-2 focus:ring-amber-500 resize-none" placeholder="Your message..."></textarea>
+                    </div>
+
+                    <!-- Consent -->
+                    <label class="flex items-center mb-6">
+                        <input type="checkbox" required class="w-4 h-4 rounded">
+                        <span class="ml-2 text-sm text-gray-700">I agree to the privacy policy</span>
+                    </label>
+
+                    <!-- Submit -->
+                    <button type="submit" class="btn-primary w-full py-3 text-lg">
+                        <i class="fas fa-send mr-2"></i>Send Message
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- FAQ Section -->
+    <div class="mt-16">
+        <h2 class="text-3xl font-bold text-gray-900 mb-8 text-center">Frequently Asked Questions</h2>
+
+        <div class="max-w-3xl mx-auto space-y-4">
+            <!-- FAQ 1 -->
+            <div class="card p-6 cursor-pointer hover:shadow-lg transition-shadow" onclick="toggleContactFaq(this)">
+                <div class="flex justify-between items-center">
+                    <h3 class="font-bold text-gray-900">How can I place an order?</h3>
+                    <i class="fas fa-chevron-down text-amber-700"></i>
+                </div>
+                <p class="text-gray-600 mt-3 max-h-0 overflow-hidden transition-all duration-300">
+                    Browse our products page, add items to your cart, and proceed to checkout. Fill in your delivery details and place the order.
+                </p>
+            </div>
+
+            <!-- FAQ 2 -->
+            <div class="card p-6 cursor-pointer hover:shadow-lg transition-shadow" onclick="toggleContactFaq(this)">
+                <div class="flex justify-between items-center">
+                    <h3 class="font-bold text-gray-900">What is your delivery timeframe?</h3>
+                    <i class="fas fa-chevron-down text-amber-700"></i>
+                </div>
+                <p class="text-gray-600 mt-3 max-h-0 overflow-hidden transition-all duration-300">
+                    We offer free shipping across India with an estimated delivery of 5-7 business days. Express delivery available in metro areas.
+                </p>
+            </div>
+
+            <!-- FAQ 3 -->
+            <div class="card p-6 cursor-pointer hover:shadow-lg transition-shadow" onclick="toggleContactFaq(this)">
+                <div class="flex justify-between items-center">
+                    <h3 class="font-bold text-gray-900">Do you offer bulk orders?</h3>
+                    <i class="fas fa-chevron-down text-amber-700"></i>
+                </div>
+                <p class="text-gray-600 mt-3 max-h-0 overflow-hidden transition-all duration-300">
+                    Yes! We offer special pricing for bulk orders. Contact our sales team at wholesale@picklestore.com for more details.
+                </p>
+            </div>
+
+            <!-- FAQ 4 -->
+            <div class="card p-6 cursor-pointer hover:shadow-lg transition-shadow" onclick="toggleContactFaq(this)">
+                <div class="flex justify-between items-center">
+                    <h3 class="font-bold text-gray-900">Can I cancel or modify my order?</h3>
+                    <i class="fas fa-chevron-down text-amber-700"></i>
+                </div>
+                <p class="text-gray-600 mt-3 max-h-0 overflow-hidden transition-all duration-300">
+                    Orders can be cancelled within 2 hours of placement. After that, modifications must be made by contacting our customer service.
+                </p>
+            </div>
+
+            <!-- FAQ 5 -->
+            <div class="card p-6 cursor-pointer hover:shadow-lg transition-shadow" onclick="toggleContactFaq(this)">
+                <div class="flex justify-between items-center">
+                    <h3 class="font-bold text-gray-900">How can I become a distributor?</h3>
+                    <i class="fas fa-chevron-down text-amber-700"></i>
+                </div>
+                <p class="text-gray-600 mt-3 max-h-0 overflow-hidden transition-all duration-300">
+                    We welcome partnership inquiries. Contact us at partnerships@picklestore.com with your business details and we'll get back to you shortly.
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Contact Success Modal -->
+<div id="contact-success-modal" class="hidden fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4">
+    <div class="card max-w-md w-full p-8 text-center">
+        <div class="text-6xl mb-4">✅</div>
+        <h2 class="text-2xl font-bold text-gray-900 mb-2">Message Sent!</h2>
+        <p class="text-gray-600 mb-6">
+            Thank you for contacting us. We'll get back to you within 24 hours.
+        </p>
+        <button onclick="closeContactModal()" class="btn-primary w-full">
+            Close
+        </button>
+    </div>
+</div>
+
+<!-- Script -->
+<script>
+    // Toggle Contact FAQ
+    function toggleContactFaq(element) {
+        const paragraph = element.querySelector('p');
+        const icon = element.querySelector('i');
+        
+        element.parentElement.querySelectorAll('.card').forEach(card => {
+            if (card !== element) {
+                card.querySelector('p').style.maxHeight = '0';
+                card.querySelector('i').style.transform = 'rotate(0)';
+            }
+        });
+
+        if (paragraph.style.maxHeight === '0px' || !paragraph.style.maxHeight) {
+            paragraph.style.maxHeight = paragraph.scrollHeight + 'px';
+            icon.style.transform = 'rotate(180deg)';
+        } else {
+            paragraph.style.maxHeight = '0';
+            icon.style.transform = 'rotate(0)';
+        }
+    }
+
+    // Submit Contact Form
+    function submitContactForm(event) {
+        event.preventDefault();
+        // In a real application, this would send the form data to a backend
+        document.getElementById('contact-form').reset();
+        document.getElementById('contact-success-modal').classList.remove('hidden');
+    }
+
+    // Close Contact Modal
+    function closeContactModal() {
+        document.getElementById('contact-success-modal').classList.add('hidden');
+    }
+</script>
+{% endblock %}

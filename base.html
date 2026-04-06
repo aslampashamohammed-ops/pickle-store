@@ -1,0 +1,501 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Pickle Store - Premium Homemade Indian Pickles{% endblock %}</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            scroll-behavior: smooth;
+        }
+
+        :root {
+            --primary: #8B4513;
+            --primary-dark: #6B3410;
+            --accent: #D2691E;
+            --success: #10B981;
+            --warning: #F59E0B;
+            --danger: #EF4444;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        /* Custom Colors */
+        .btn-primary {
+            @apply bg-amber-700 hover:bg-amber-800 text-white font-semibold py-2 px-4 rounded-lg transition-all duration-300 transform hover:scale-105;
+        }
+
+        .btn-secondary {
+            @apply bg-amber-100 hover:bg-amber-200 text-amber-900 font-semibold py-2 px-4 rounded-lg transition-all duration-300;
+        }
+
+        .btn-outline {
+            @apply border-2 border-amber-700 text-amber-700 hover:bg-amber-700 hover:text-white font-semibold py-2 px-4 rounded-lg transition-all duration-300;
+        }
+
+        /* Card Styles */
+        .card {
+            @apply bg-white rounded-xl shadow-lg hover:shadow-2xl transition-shadow duration-300 overflow-hidden;
+        }
+
+        .card-hover {
+            @apply transform hover:-translate-y-2 transition-transform duration-300;
+        }
+
+        /* Product Card */
+        .product-card {
+            @apply card card-hover;
+        }
+
+        .product-card img {
+            @apply w-full h-48 bg-gradient-to-br from-amber-100 to-orange-100 flex items-center justify-center text-4xl;
+        }
+
+        /* Badge */
+        .badge {
+            @apply inline-block px-3 py-1 rounded-full text-sm font-semibold;
+        }
+
+        .badge-primary {
+            @apply bg-amber-100 text-amber-800;
+        }
+
+        .badge-success {
+            @apply bg-green-100 text-green-800;
+        }
+
+        .badge-warning {
+            @apply bg-orange-100 text-orange-800;
+        }
+
+        .badge-danger {
+            @apply bg-red-100 text-red-800;
+        }
+
+        /* Star Rating */
+        .stars {
+            @apply flex gap-1 items-center;
+        }
+
+        .star {
+            @apply text-yellow-400;
+        }
+
+        /* Navigation */
+        nav {
+            @apply sticky top-0 z-50 bg-white shadow-md;
+        }
+
+        .nav-link {
+            @apply text-gray-700 hover:text-amber-700 font-medium transition-colors duration-300 relative;
+        }
+
+        .nav-link::after {
+            content: '';
+            @apply absolute bottom-0 left-0 w-0 h-0.5 bg-amber-700 transition-all duration-300;
+        }
+
+        .nav-link:hover::after {
+            @apply w-full;
+        }
+
+        /* Cart Icon Animation */
+        .cart-icon {
+            @apply relative cursor-pointer transition-transform duration-300 hover:scale-110;
+        }
+
+        .cart-badge {
+            @apply absolute top-0 right-0 bg-red-500 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs font-bold;
+        }
+
+        /* Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes slideInLeft {
+            from {
+                opacity: 0;
+                transform: translateX(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        @keyframes slideInRight {
+            from {
+                opacity: 0;
+                transform: translateX(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        @keyframes pulse-scale {
+            0%, 100% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.05);
+            }
+        }
+
+        .animate-fade-in-up {
+            animation: fadeInUp 0.6s ease-out forwards;
+        }
+
+        .animate-slide-in-left {
+            animation: slideInLeft 0.6s ease-out forwards;
+        }
+
+        .animate-slide-in-right {
+            animation: slideInRight 0.6s ease-out forwards;
+        }
+
+        .animate-pulse-scale {
+            animation: pulse-scale 2s ease-in-out infinite;
+        }
+
+        /* Stagger animation */
+        .stagger-item {
+            animation: fadeInUp 0.6s ease-out forwards;
+        }
+
+        .stagger-item:nth-child(1) { animation-delay: 0.1s; }
+        .stagger-item:nth-child(2) { animation-delay: 0.2s; }
+        .stagger-item:nth-child(3) { animation-delay: 0.3s; }
+        .stagger-item:nth-child(4) { animation-delay: 0.4s; }
+        .stagger-item:nth-child(5) { animation-delay: 0.5s; }
+        .stagger-item:nth-child(6) { animation-delay: 0.6s; }
+
+        /* Hero Section */
+        .hero {
+            @apply relative overflow-hidden;
+        }
+
+        .hero::before {
+            content: '';
+            @apply absolute inset-0 bg-gradient-to-r from-amber-600/80 via-orange-500/70 to-red-500/80;
+            pointer-events: none;
+        }
+
+        .hero-content {
+            @apply relative z-10;
+        }
+
+        /* Section */
+        section {
+            @apply py-16 md:py-20;
+        }
+
+        .section-title {
+            @apply text-3xl md:text-4xl font-bold text-gray-900 mb-4 text-center;
+        }
+
+        .section-subtitle {
+            @apply text-gray-600 text-center text-lg mb-12;
+        }
+
+        /* Testimonial Card */
+        .testimonial-card {
+            @apply bg-white p-6 rounded-xl shadow-lg relative;
+        }
+
+        .testimonial-card::before {
+            content: '❝';
+            @apply absolute top-2 left-4 text-5xl text-amber-200 opacity-50;
+        }
+
+        /* Loading Spinner */
+        .spinner {
+            @apply animated;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .section-title {
+                @apply text-2xl;
+            }
+
+            .section-subtitle {
+                @apply text-base;
+            }
+        }
+    </style>
+
+    {% block extra_css %}{% endblock %}
+</head>
+<body class="bg-gray-50">
+    <!-- Navigation Bar -->
+    <nav>
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <!-- Logo -->
+                <a href="/" class="flex items-center space-x-2 text-2xl font-bold text-amber-700 hover:text-amber-800 transition-colors">
+                    <i class="fas fa-jar text-3xl"></i>
+                    <span class="hidden sm:inline">Pickle Store</span>
+                </a>
+
+                <!-- Desktop Menu -->
+                <div class="hidden md:flex items-center space-x-8">
+                    <a href="/" class="nav-link">Home</a>
+                    <a href="/products" class="nav-link">Products</a>
+                    <a href="/about" class="nav-link">About Us</a>
+                    <a href="/contact" class="nav-link">Contact</a>
+                </div>
+
+                <!-- Right Side Icons -->
+                <div class="flex items-center space-x-4">
+                    <!-- Search (hidden on mobile) -->
+                    <div class="hidden sm:flex items-center bg-gray-100 rounded-lg px-3 py-2">
+                        <input type="text" id="search-input" placeholder="Search pickles..." class="bg-transparent outline-none w-40 text-sm">
+                        <button onclick="handleSearch()" class="text-gray-600 hover:text-amber-700">
+                            <i class="fas fa-search"></i>
+                        </button>
+                    </div>
+
+                    <!-- Cart Icon -->
+                    <div class="cart-icon relative" onclick="goToCart()">
+                        <i class="fas fa-shopping-cart text-xl text-amber-700 hover:text-amber-800"></i>
+                        <span class="cart-badge" id="cart-count" style="display: none;">0</span>
+                    </div>
+
+                    <!-- Mobile Menu Toggle -->
+                    <button class="md:hidden text-amber-700 text-xl" onclick="toggleMobileMenu()">
+                        <i class="fas fa-bars"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Mobile Menu -->
+            <div id="mobile-menu" class="hidden md:hidden pb-4 border-t border-gray-200 mt-4">
+                <a href="/" class="block py-2 text-gray-700 hover:text-amber-700 font-medium">Home</a>
+                <a href="/products" class="block py-2 text-gray-700 hover:text-amber-700 font-medium">Products</a>
+                <a href="/about" class="block py-2 text-gray-700 hover:text-amber-700 font-medium">About Us</a>
+                <a href="/contact" class="block py-2 text-gray-700 hover:text-amber-700 font-medium">Contact</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main>
+        {% block content %}{% endblock %}
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 text-white pt-16 pb-8">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8 mb-12">
+                <!-- About -->
+                <div>
+                    <h3 class="text-xl font-bold mb-4 text-amber-400">About Us</h3>
+                    <p class="text-gray-400 text-sm">
+                        Authentic homemade Indian pickles made with love, traditional recipes, and premium ingredients.
+                    </p>
+                </div>
+
+                <!-- Quick Links -->
+                <div>
+                    <h3 class="text-xl font-bold mb-4 text-amber-400">Quick Links</h3>
+                    <ul class="space-y-2 text-gray-400 text-sm">
+                        <li><a href="/" class="hover:text-amber-400 transition-colors">Home</a></li>
+                        <li><a href="/products" class="hover:text-amber-400 transition-colors">Products</a></li>
+                        <li><a href="/about" class="hover:text-amber-400 transition-colors">About</a></li>
+                        <li><a href="/contact" class="hover:text-amber-400 transition-colors">Contact</a></li>
+                    </ul>
+                </div>
+
+                <!-- Contact Info -->
+                <div>
+                    <h3 class="text-xl font-bold mb-4 text-amber-400">Contact</h3>
+                    <ul class="space-y-2 text-gray-400 text-sm">
+                        <li><i class="fas fa-phone mr-2"></i>+91 9876543210</li>
+                        <li><i class="fas fa-envelope mr-2"></i>info@picklestore.com</li>
+                        <li><i class="fas fa-map-marker mr-2"></i>India, Worldwide Shipping</li>
+                    </ul>
+                </div>
+
+                <!-- Social Media -->
+                <div>
+                    <h3 class="text-xl font-bold mb-4 text-amber-400">Follow Us</h3>
+                    <div class="flex space-x-4">
+                        <a href="#" class="text-gray-400 hover:text-amber-400 transition-colors text-xl">
+                            <i class="fab fa-facebook"></i>
+                        </a>
+                        <a href="#" class="text-gray-400 hover:text-amber-400 transition-colors text-xl">
+                            <i class="fab fa-instagram"></i>
+                        </a>
+                        <a href="#" class="text-gray-400 hover:text-amber-400 transition-colors text-xl">
+                            <i class="fab fa-twitter"></i>
+                        </a>
+                        <a href="#" class="text-gray-400 hover:text-amber-400 transition-colors text-xl">
+                            <i class="fab fa-youtube"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Bottom Footer -->
+            <div class="border-t border-gray-800 pt-8 flex flex-col md:flex-row justify-between items-center">
+                <p class="text-gray-400 text-sm">&copy; 2024 Pickle Store. All rights reserved.</p>
+                <div class="flex space-x-6 mt-4 md:mt-0 text-gray-400 text-sm">
+                    <a href="#" class="hover:text-amber-400 transition-colors">Privacy Policy</a>
+                    <a href="#" class="hover:text-amber-400 transition-colors">Terms of Service</a>
+                    <a href="#" class="hover:text-amber-400 transition-colors">Return Policy</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Cart Modal -->
+    <div id="cart-modal" class="hidden fixed inset-0 bg-black/50 z-50 flex items-end md:items-center justify-center">
+        <div class="bg-white w-full md:w-96 md:rounded-xl md:shadow-2xl max-h-96 overflow-y-auto">
+            <div class="sticky top-0 bg-amber-700 text-white p-4 flex justify-between items-center">
+                <h3 class="text-xl font-bold">Shopping Cart</h3>
+                <button onclick="closeCart()" class="text-white hover:bg-amber-800 rounded-full w-8 h-8 flex items-center justify-center transition-colors">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div id="cart-items-modal" class="p-4 space-y-3"></div>
+            <div class="border-t p-4">
+                <div class="flex justify-between mb-4 text-lg font-bold">
+                    <span>Total:</span>
+                    <span id="cart-total-modal">₹0</span>
+                </div>
+                <a href="/cart" class="btn-primary w-full text-center block">Proceed to Checkout</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Script -->
+    <script>
+        let sessionId = localStorage.getItem('sessionId') || Math.random().toString(36).substr(2, 9);
+        localStorage.setItem('sessionId', sessionId);
+
+        // Product Icon Mapping
+        function getProductIcon(iconType) {
+            const iconMap = {
+                'mango': 'fas fa-leaf text-yellow-600',
+                'chilli': 'fas fa-pepper-hot text-red-600',
+                'garlic': 'fas fa-clove text-orange-600',
+                'ginger': 'fas fa-crown text-yellow-700',
+                'lemon': 'fas fa-lemon text-yellow-500',
+                'carrot': 'fas fa-carrot text-orange-500',
+                'apple': 'fas fa-apple-alt text-red-500',
+                'plant': 'fas fa-leaf text-green-600',
+                'leaf': 'fas fa-leaf text-green-600',
+                'bottle': 'fas fa-jar text-amber-700',
+                'circle-notch': 'fas fa-ring text-amber-600',
+                'drumstick': 'fas fa-drumstick-bite text-amber-700',
+                'fish': 'fas fa-fish text-blue-600',
+                'gift': 'fas fa-gift text-red-600',
+                'turmeric': 'fas fa-dharmachakra text-yellow-600',
+            };
+            return iconMap[iconType] || 'fas fa-jar text-amber-700';
+        }
+
+        // Toggle Mobile Menu
+        function toggleMobileMenu() {
+            const menu = document.getElementById('mobile-menu');
+            menu.classList.toggle('hidden');
+        }
+
+        // Update Cart Count
+        async function updateCartCount() {
+            const response = await fetch(`/api/cart?session_id=${sessionId}`);
+            const data = await response.json();
+            const count = data.count;
+            const cartCount = document.getElementById('cart-count');
+            if (count > 0) {
+                cartCount.textContent = count;
+                cartCount.style.display = 'flex';
+            } else {
+                cartCount.style.display = 'none';
+            }
+        }
+
+        // Show Cart Modal
+        function showCart() {
+            document.getElementById('cart-modal').classList.remove('hidden');
+            loadCartModal();
+        }
+
+        // Close Cart Modal
+        function closeCart() {
+            document.getElementById('cart-modal').classList.add('hidden');
+        }
+
+        // Go to Cart Page
+        function goToCart() {
+            window.location.href = '/cart';
+        }
+
+        // Load Cart Modal
+        async function loadCartModal() {
+            const response = await fetch(`/api/cart?session_id=${sessionId}`);
+            const data = await response.json();
+            const container = document.getElementById('cart-items-modal');
+            
+            if (data.items.length === 0) {
+                container.innerHTML = '<p class="text-gray-600 text-center py-8">Your cart is empty</p>';
+            } else {
+                container.innerHTML = data.items.map(item => `
+                    <div class="flex justify-between items-center bg-gray-50 p-3 rounded-lg">
+                        <div>
+                            <p class="font-semibold text-sm">${item.name}</p>
+                            <p class="text-xs text-gray-600">₹${item.price} × ${item.quantity}</p>
+                        </div>
+                        <p class="font-bold">₹${(item.price * item.quantity).toLocaleString('en-IN')}</p>
+                    </div>
+                `).join('');
+            }
+
+            document.getElementById('cart-total-modal').textContent = '₹' + data.total.toLocaleString('en-IN');
+        }
+
+        // Handle Search
+        function handleSearch() {
+            const query = document.getElementById('search-input').value;
+            if (query.trim()) {
+                window.location.href = `/products?search=${encodeURIComponent(query)}`;
+            }
+        }
+
+        // Allow Enter key in search
+        document.addEventListener('DOMContentLoaded', () => {
+            const searchInput = document.getElementById('search-input');
+            if (searchInput) {
+                searchInput.addEventListener('keypress', (e) => {
+                    if (e.key === 'Enter') {
+                        handleSearch();
+                    }
+                });
+            }
+            updateCartCount();
+        });
+    </script>
+
+    {% block extra_js %}{% endblock %}
+</body>
+</html>
